@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pi Swap - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --pi-primary: #1EC0C0;  /* Pi Network teal */
+            --pi-secondary: #2ECC71; /* Pi Network green */
+            --pi-accent: #F39C12;   /* Pi Network orange */
+            --pi-dark: #1A3A4F;     /* Dark blue from Pi Network */
+            --pi-light: #E8F4F8;    /* Light background from Pi Network */
+            --text-light: #FFFFFF;
+            --text-dark: #2C3E50;   /* Dark text from Pi Network */
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --success-color: #4CAF50;
+            --warning-color: #FFC107;
+            --error-color: #FF5252;
+            --gradient-primary: linear-gradient(135deg, var(--pi-primary) 0%, var(--pi-accent) 100%);
+            --gradient-dark: linear-gradient(135deg, var(--pi-dark) 0%, var(--pi-primary) 100%);
+            --modal-backdrop: rgba(0, 0, 0, 0.8);
+            --star-color: #FFD700;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--pi-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+        
+        .scroll-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 15px;
+            background: rgba(30, 192, 192, 0.3);
+            color: var(--text-light);
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            border: 2px solid var(--pi-primary);
+        }
+        
+        .back-button:hover {
+            background: rgba(30, 192, 192, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .launch-notification {
+            background: var(--pi-accent);
+            color: var(--pi-dark);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+            border: 2px solid rgba(243, 156, 18, 0.5);
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        .dex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .dex-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--pi-accent);
+        }
+        
+        /* Profile Card */
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(30, 192, 192, 0.2);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .profile-card:hover {
+            border-color: rgba(30, 192, 192, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: var(--pi-dark);
+            font-weight: bold;
+        }
+        
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .profile-stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .star {
+            color: var(--star-color);
+            font-size: 16px;
+        }
+        
+        .profile-wallet {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            word-break: break-all;
+        }
+        
+        .profile-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .profile-action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .profile-action-btn:hover {
+            background: var(--pi-primary);
+            color: var(--pi-dark);
+            transform: translateY(-3px);
+        }
+        
+        /* Balance Card */
+        .balance-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(30, 192, 192, 0.2);
+            transition: var(--transition);
+        }
+        
+        .balance-card:hover {
+            border-color: rgba(30, 192, 192, 0.4);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .balance-title {
+            font-weight: 600;
+            color: var(--pi-accent);
+        }
+        
+        .total-balance {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(30, 192, 192, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .action-btn i {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--pi-accent);
+        }
+        
+        .action-btn span {
+            font-size: 12px;
+        }
+        
+        /* Coming Soon Banner */
+        .coming-soon-banner {
+            background: var(--gradient-dark);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .coming-soon-banner::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0),
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(30deg); }
+            100% { transform: translateX(100%) rotate(30deg); }
+        }
+        
+        .coming-soon-banner h3 {
+            margin: 0;
+            font-size: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Tokens List */
+        .tokens-list {
+            margin-top: 20px;
+        }
+        
+        .tokens-list-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--pi-accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .token-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .token-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(30, 192, 192, 0.4);
+        }
+        
+        .token-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--pi-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 16px;
+            color: var(--pi-dark);
+        }
+        
+        .token-details {
+            flex: 1;
+        }
+        
+        .token-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .token-balance {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        
+        .token-value {
+            text-align: right;
+        }
+        
+        /* Button Links Section */
+        .button-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        
+        .link-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(30, 192, 192, 0.3);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-light);
+            transition: var(--transition);
+        }
+        
+        .link-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .link-button i {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: var(--pi-accent);
+        }
+        
+        .link-button span {
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        /* Bottom Menu */
+        .bottom-menu {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26, 58, 79, 0.9);
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(30, 192, 192, 0.3);
+            z-index: 1000;
+            max-width: 400px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+        
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            gap: 5px;
+            text-decoration: none;
+            position: relative;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: var(--transition);
+            opacity: 0.7;
+            flex: 1;
+        }
+        
+        .menu-btn:hover {
+            opacity: 1;
+            background: rgba(30, 192, 192, 0.1);
+        }
+        
+        .menu-btn i {
+            font-size: 20px;
+        }
+        
+        .menu-btn.active {
+            opacity: 1;
+            font-weight: 600;
+        }
+        
+        .menu-btn.active::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background-color: var(--pi-accent);
+            border-radius: 3px;
+        }
+        
+        /* Floating Action Button */
+        .fab-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+        }
+        
+        .fab-main {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: var(--pi-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .fab-main:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .fab-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-dark);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+        }
+        
+        .fab-container.open .fab-item {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        
+        .fab-item:nth-child(1) { transition-delay: 0ms; }
+        .fab-item:nth-child(2) { transition-delay: 50ms; }
+        .fab-item:nth-child(3) { transition-delay: 100ms; }
+        
+        /* Modal Styles (matching Swap page) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--modal-backdrop);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+            backdrop-filter: blur(5px);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: var(--pi-dark);
+            border-radius: 16px;
+            padding: 25px;
+            width: 85%;
+            max-width: 350px;
+            border: 2px solid var(--pi-primary);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 0;
+            background: var(--pi-dark);
+            padding: 10px 0;
+            z-index: 1;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--pi-accent);
+        }
+        
+        .close-modal {
+            background: var(--pi-primary);
+            color: var(--pi-dark);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .close-modal:hover {
+            background: var(--pi-accent);
+            transform: rotate(90deg);
+        }
+        
+        /* Confirmation Buttons */
+        .confirmation-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .confirmation-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .confirmation-btn-primary {
+            background: var(--gradient-primary);
+            color: var(--pi-dark);
+        }
+        
+        .confirmation-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+        
+        .confirmation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--pi-accent);
+            color: var(--pi-dark);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            z-index: 3000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: toastSlideIn 0.3s ease-out, toastSlideOut 0.3s ease-in 2.7s;
+            display: none;
+            max-width: 90%;
+            text-align: center;
+        }
+        
+        @keyframes toastSlideIn {
+            from { bottom: -50px; opacity: 0; }
+            to { bottom: 80px; opacity: 1; }
+        }
+        
+        @keyframes toastSlideOut {
+            from { bottom: 80px; opacity: 1; }
+            to { bottom: -50px; opacity: 0; }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 350px) {
+            .quick-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .button-links {
+                grid-template-columns: 1fr;
+            }
+            
+            .confirmation-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-container">
+        <a href="https://piswap362.github.io/Swap/" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+        
+        <div class="launch-notification">
+            🚀 Coming Soon: Pi Network features will be available at mainnet launch!
+        </div>
+
+        <div class="dex-header">
+            <h1 class="dex-title">Profile</h1>
+            <div>
+                <i class="fas fa-bell" style="color: var(--pi-accent); font-size: 20px;"></i>
+            </div>
+        </div>
+        
+        <!-- Profile Card -->
+        <div class="profile-card">
+            <div class="profile-avatar">P</div>
+            <div class="profile-name">Pi Pioneer</div>
+            <div class="profile-stars">
+                <i class="fas fa-star star"></i>
+                <i class="fas fa-star star"></i>
+                <i class="fas fa-star star"></i>
+                <i class="fas fa-star star"></i>
+                <i class="far fa-star star"></i>
+            </div>
+            <div class="profile-wallet">pi1234567890abcdefghijklmnopqrstuv</div>
+            <div class="profile-actions">
+                <button class="profile-action-btn" onclick="showQRModal()">
+                    <i class="fas fa-qrcode"></i>
+                </button>
+                <button class="profile-action-btn" onclick="copyWalletAddress()">
+                    <i class="fas fa-copy"></i>
+                </button>
+                <button class="profile-action-btn" onclick="showShareModal()">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-header">
+                <div class="balance-title">Total Balance</div>
+                <i class="fas fa-eye" style="opacity: 0.7;" onclick="toggleBalanceVisibility()"></i>
+            </div>
+            <div class="total-balance">$0,000.00</div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="https://piswap362.github.io/Swap/" class="action-btn">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Swap</span>
+            </a>
+            <a href="#" class="action-btn" onclick="showComingSoonModal()">
+                <i class="fas fa-arrow-down"></i>
+                <span>Deposit</span>
+            </a>
+            <a href="#" class="action-btn" onclick="showComingSoonModal()">
+                <i class="fas fa-arrow-up"></i>
+                <span>Withdraw</span>
+            </a>
+            <a href="#" class="action-btn" onclick="showComingSoonModal()">
+                <i class="fas fa-coins"></i>
+                <span>Stake</span>
+            </a>
+        </div>
+        
+        <!-- Coming Soon Banner -->
+        <div class="coming-soon-banner">
+            <h3>🎉 New Pi Network features coming soon!</h3>
+        </div>
+        
+        <!-- Button Links Section -->
+        <div class="button-links">
+            <a href="#" class="link-button" onclick="showComingSoonModal()">
+                <i class="fas fa-history"></i>
+                <span>Transaction History</span>
+            </a>
+            <a href="#" class="link-button" onclick="showComingSoonModal()">
+                <i class="fas fa-wallet"></i>
+                <span>Wallet Management</span>
+            </a>
+            <a href="#" class="link-button" onclick="showComingSoonModal()">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="#" class="link-button" onclick="showComingSoonModal()">
+                <i class="fas fa-shield-alt"></i>
+                <span>Security</span>
+            </a>
+        </div>
+        
+        <!-- Tokens List -->
+        <div class="tokens-list">
+            <div class="tokens-list-title">
+                <span>Your Assets</span>
+                <span>Balance</span>
+            </div>
+            
+            <div class="token-item">
+                <div class="token-value">$845.20</div>
+                <div class="token-details">
+                    <div class="token-name">PI</div>
+                    <div class="token-balance">28.05 π</div>
+                </div>
+                <div class="token-icon">π</div>
+            </div>
+            
+            <div class="token-item">
+                <div class="token-value">$320.75</div>
+                <div class="token-details">
+                    <div class="token-name">USDT</div>
+                    <div class="token-balance">320.75 USDT</div>
+                </div>
+                <div class="token-icon">$</div>
+            </div>
+            
+            <div class="token-item">
+                <div class="token-value">$79.55</div>
+                <div class="token-details">
+                    <div class="token-name">PSWAP</div>
+                    <div class="token-balance">1,245.80 PSWAP</div>
+                </div>
+                <div class="token-icon">P</div>
+            </div>
+        </div>
+        
+        <div class="bottom-menu">
+            <a href="swap.html" class="menu-btn">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Swap</span>
+            </a>
+            <a href="stats.html" class="menu-btn">
+                <i class="fas fa-chart-line"></i>
+                <span>Stats</span>
+            </a>
+            <a href="pools.html" class="menu-btn">
+                <i class="fas fa-coins"></i>
+                <span>Pools</span>
+            </a>
+            <a href="profile.html" class="menu-btn active">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Floating Action Button -->
+    <div class="fab-container" id="fabContainer">
+        <button class="fab-main" id="fabMain">
+            <i class="fas fa-bolt"></i>
+        </button>
+        <button class="fab-item" id="supportBtn">
+            <i class="fas fa-headset"></i>
+        </button>
+        <button class="fab-item" id="feedbackBtn">
+            <i class="fas fa-comment-alt"></i>
+        </button>
+        <button class="fab-item" id="themeBtn">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+    
+    <!-- QR Code Modal -->
+    <div class="modal" id="qrModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Pi Wallet QR Code</h2>
+                <button class="close-modal" onclick="closeModal('qrModal')">×</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <div style="background: white; padding: 20px; display: inline-block; border-radius: 8px;">
+                    <!-- Placeholder for QR code -->
+                    <i class="fas fa-qrcode" style="font-size: 150px; color: black;"></i>
+                </div>
+                <p style="margin-top: 15px; font-size: 14px;">Scan this QR code to receive Pi payments</p>
+            </div>
+            <div class="confirmation-actions">
+                <button class="confirmation-btn confirmation-btn-secondary" onclick="closeModal('qrModal')">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Share Pi Wallet Address</h2>
+                <button class="close-modal" onclick="closeModal('shareModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px;">Share your Pi wallet address with others:</p>
+                <div style="background: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 8px; word-break: break-all; margin-bottom: 15px;">
+                    pi1234567890abcdefghijklmnopqrstuv
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                    <button class="confirmation-btn confirmation-btn-secondary" onclick="shareVia('copy')">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
+                    <button class="confirmation-btn confirmation-btn-secondary" onclick="shareVia('whatsapp')">
+                        <i class="fab fa-whatsapp"></i>
+                    </button>
+                    <button class="confirmation-btn confirmation-btn-secondary" onclick="shareVia('telegram')">
+                        <i class="fab fa-telegram"></i>
+                    </button>
+                    <button class="confirmation-btn confirmation-btn-secondary" onclick="shareVia('email')">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="confirmation-actions">
+                <button class="confirmation-btn confirmation-btn-primary" onclick="closeModal('shareModal')">Done</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Coming Soon Modal -->
+    <div class="modal" id="comingSoonModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Coming Soon!</h2>
+                <button class="close-modal" onclick="closeModal('comingSoonModal')">×</button>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <i class="fas fa-rocket" style="font-size: 50px; color: var(--pi-accent); margin-bottom: 20px;"></i>
+                <p>This feature will be available when Pi Network opens its mainnet!</p>
+                <p>Stay tuned for exciting new functionality!</p>
+            </div>
+            <div class="confirmation-actions">
+                <button class="confirmation-btn confirmation-btn-primary" onclick="closeModal('comingSoonModal')">Got It</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toastNotification"></div>
+    
+    <script>
+        // Simple copy wallet address functionality
+        function copyWalletAddress() {
+            const walletAddress = 'pi1234567890abcdefghijklmnopqrstuv';
+            navigator.clipboard.writeText(walletAddress);
+            showToast('Pi wallet address copied to clipboard!');
+        }
+        
+        // Toggle balance visibility
+        function toggleBalanceVisibility() {
+            const eyeIcon = document.querySelector('.fa-eye');
+            const totalBalance = document.querySelector('.total-balance');
+            
+            eyeIcon.classList.toggle('fa-eye-slash');
+            
+            if (eyeIcon.classList.contains('fa-eye-slash')) {
+                totalBalance.textContent = '*******';
+                eyeIcon.style.opacity = '1';
+            } else {
+                totalBalance.textContent = '$1,245.50';
+                eyeIcon.style.opacity = '0.7';
+            }
+        }
+        
+        // Modal functions
+        function showQRModal() {
+            document.getElementById('qrModal').style.display = 'flex';
+        }
+        
+        function showShareModal() {
+            document.getElementById('shareModal').style.display = 'flex';
+        }
+        
+        function showComingSoonModal() {
+            document.getElementById('comingSoonModal').style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Share via different methods
+        function shareVia(method) {
+            let message = 'My Pi wallet address: pi1234567890abcdefghijklmnopqrstuv';
+            
+            switch(method) {
+                case 'copy':
+                    navigator.clipboard.writeText(message);
+                    showToast('Address copied to clipboard!');
+                    break;
+                case 'whatsapp':
+                    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'telegram':
+                    window.open(`https://t.me/share/url?url=${encodeURIComponent(message)}`, '_blank');
+                    break;
+                case 'email':
+                    window.open(`mailto:?body=${encodeURIComponent(message)}`, '_blank');
+                    break;
+            }
+        }
+        
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+        
+        // FAB Logic
+        const fabContainer = document.getElementById('fabContainer');
+        const fabMain = document.getElementById('fabMain');
+        
+        fabMain.addEventListener('click', () => {
+            fabContainer.classList.toggle('open');
+        });
+        
+        // Coming Soon functionality for FAB buttons
+        const comingSoonButtons = [
+            document.getElementById('supportBtn'),
+            document.getElementById('feedbackBtn'),
+            document.getElementById('themeBtn')
+        ];
+        
+        comingSoonButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('comingSoonMessage').textContent = 'This feature is coming soon!';
+                document.getElementById('comingSoonModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Close modals with Escape key
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                const openModals = document.querySelectorAll('.modal[style="display: flex;"]');
+                if (openModals.length > 0) {
+                    openModals.forEach(modal => {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
